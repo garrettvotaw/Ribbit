@@ -175,7 +175,7 @@
         fileType = @"video";
     }
     
-    File *file = [File fileWithName:fileName data:fileData];
+//    File *file = [File fileWithName:fileName data:fileData];
 //    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
 //        if (error) {
 //            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
