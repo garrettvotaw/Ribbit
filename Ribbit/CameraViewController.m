@@ -143,10 +143,11 @@
 
 - (IBAction)send:(id)sender {
     if (self.image == nil && [self.videoFilePath length] == 0) {
-        UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"Try again!"
-                                                            message:@"Please capture or select a photo or video to share!"
-                                                           delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-        [alertView show];
+        
+        UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Try again!" message:@"Please capture or select a photo or video to share!" preferredStyle:UIAlertControllerStyleAlert];
+        UIAlertAction *okAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+        [alert addAction:okAction];
+        [self presentViewController:alert animated:YES completion:nil];
         [self presentViewController:self.imagePicker animated:NO completion:nil];
     }
     else {
@@ -175,35 +176,35 @@
     }
     
     File *file = [File fileWithName:fileName data:fileData];
-    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-        if (error) {
-            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
-                                                                message:@"Please try sending your message again."
-                                                               delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-            [alertView show];
-        }
-        else {
-            Message *message = [[Message alloc] init];
-            message.file = file;
-            message.fileType = fileType;
-            message.recipients = self.recipients;
-            message.senderId = [[User currentUser] objectId];
-            message.senderName = [[User currentUser] username];
-          
-            [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-                if (error) {
-                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
-                                                                        message:@"Please try sending your message again."
-                                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-                    [alertView show];
-                }
-                else {
-                    // Everything was successful!
-                    [self reset];
-                }
-            }];
-        }
-    }];
+//    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//        if (error) {
+//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
+//                                                                message:@"Please try sending your message again."
+//                                                               delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//            [alertView show];
+//        }
+//        else {
+//            Message *message = [[Message alloc] init];
+//            message.file = file;
+//            message.fileType = fileType;
+//            message.recipients = self.recipients;
+//            message.senderId = [[User currentUser] objectId];
+//            message.senderName = [[User currentUser] username];
+//
+//            [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+//                if (error) {
+//                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
+//                                                                        message:@"Please try sending your message again."
+//                                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
+//                    [alertView show];
+//                }
+//                else {
+//                    // Everything was successful!
+//                    [self reset];
+//                }
+//            }];
+//        }
+//    }];
 }
 
 - (void)reset {
