@@ -54,4 +54,9 @@
     return cell;
 }
 
+- (void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    EditFriendsViewController *nextVC = segue.destinationViewController;
+    nextVC.selectedFriends = _friends;
+}
+
 @end

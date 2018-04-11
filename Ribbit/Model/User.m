@@ -44,9 +44,12 @@ static NSInteger identifier = 1;
 }
 
 - (void)removeFriend:(User *)friend {
-  if ([self.friends containsObject:friend]) {
-    [self.friendsMutable removeObject:friend];
-  }
+    for (User *user in self.friendsMutable) {
+        if ([user.username isEqualToString:friend.username]) {
+            [self.friendsMutable removeObject:user];
+        }
+        break;
+    }
 }
 
 - (NSArray*) friends {

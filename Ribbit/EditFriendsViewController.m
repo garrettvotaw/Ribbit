@@ -20,7 +20,6 @@
     [super viewDidLoad];
   
   [self.tableView reloadData];
-  
   self.currentUser = [User currentUser];
 }
 
@@ -50,11 +49,10 @@
     User *user = [self.allUsers objectAtIndex:indexPath.row];
     cell.textLabel.text = user.username;
     
-    if ([self isFriend:user]) {
-        cell.accessoryType = UITableViewCellAccessoryCheckmark;
-    }
-    else {
-        cell.accessoryType = UITableViewCellAccessoryNone;
+    for (User *friend in self.selectedFriends) {
+        if ([user.username isEqualToString:friend.username]) {
+            cell.accessoryType = UITableViewCellAccessoryCheckmark;
+        }
     }
     
     return cell;
@@ -70,15 +68,21 @@
   
     User *user = [self.allUsers objectAtIndex:indexPath.row];
     
-    if ([self isFriend:user]) {
+    if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
         cell.accessoryType = UITableViewCellAccessoryNone;
         [self.currentUser removeFriend:user];
-    }
-    else {
+    } else {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.currentUser addFriend:user];
-    }    
+    }
 }
+
+//- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+//    User *user = [self.allUsers objectAtIndex:indexPath.row];
+//    cell.accessoryType = UITableViewCellAccessoryNone;
+//    [self.currentUser removeFriend:user];
+//}
 
 #pragma mark - Helper methods
 

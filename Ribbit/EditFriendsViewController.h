@@ -12,6 +12,7 @@
 @interface EditFriendsViewController : UITableViewController
 
 @property (nonatomic, strong) User *currentUser;
+@property (nonatomic, strong) NSArray *selectedFriends;
 
 - (BOOL)isFriend:(User *)user;
 
