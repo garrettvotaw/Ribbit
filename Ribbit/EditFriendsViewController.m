@@ -52,6 +52,7 @@
     for (User *friend in self.selectedFriends) {
         if ([user.username isEqualToString:friend.username]) {
             cell.accessoryType = UITableViewCellAccessoryCheckmark;
+            cell.selected = YES;
         }
     }
     
@@ -62,27 +63,24 @@
 
 - (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    [self.tableView deselectRowAtIndexPath:indexPath animated:NO];
     
     UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
   
     User *user = [self.allUsers objectAtIndex:indexPath.row];
     
     if (cell.accessoryType == UITableViewCellAccessoryCheckmark) {
-        cell.accessoryType = UITableViewCellAccessoryNone;
-        [self.currentUser removeFriend:user];
     } else {
         cell.accessoryType = UITableViewCellAccessoryCheckmark;
         [self.currentUser addFriend:user];
     }
 }
 
-//- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
-//    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
-//    User *user = [self.allUsers objectAtIndex:indexPath.row];
-//    cell.accessoryType = UITableViewCellAccessoryNone;
-//    [self.currentUser removeFriend:user];
-//}
+- (void)tableView:(UITableView *)tableView didDeselectRowAtIndexPath:(NSIndexPath *)indexPath {
+    UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
+    User *user = [self.allUsers objectAtIndex:indexPath.row];
+    cell.accessoryType = UITableViewCellAccessoryNone;
+    [self.currentUser removeFriend:user];
+}
 
 #pragma mark - Helper methods
 
