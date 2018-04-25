@@ -10,6 +10,7 @@
 #import "User.h"
 #import "File.h"
 #import "Message.h"
+#import "App.h"
 
 @interface CameraViewController ()
 
@@ -175,36 +176,42 @@
         fileType = @"video";
     }
     
-//    File *file = [File fileWithName:fileName data:fileData];
-//    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//        if (error) {
-//            UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
-//                                                                message:@"Please try sending your message again."
-//                                                               delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//            [alertView show];
-//        }
-//        else {
-//            Message *message = [[Message alloc] init];
-//            message.file = file;
-//            message.fileType = fileType;
-//            message.recipients = self.recipients;
-//            message.senderId = [[User currentUser] objectId];
-//            message.senderName = [[User currentUser] username];
-//
-//            [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
-//                if (error) {
-//                    UIAlertView *alertView = [[UIAlertView alloc] initWithTitle:@"An error occurred!"
-//                                                                        message:@"Please try sending your message again."
-//                                                                       delegate:self cancelButtonTitle:@"OK" otherButtonTitles:nil];
-//                    [alertView show];
-//                }
-//                else {
-//                    // Everything was successful!
-//                    [self reset];
-//                }
-//            }];
-//        }
-//    }];
+    File *file = [File fileWithName:fileName data:fileData];
+    [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+        if (error) {
+            UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"An error occurred!" message:@"Please try sending your message again." preferredStyle:UIAlertControllerStyleAlert];
+            UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+            [alert addAction:action];
+            
+            [self presentViewController:alert animated:YES completion:nil];
+        }
+        else {
+            Message *message = [[Message alloc] init];
+            message.file = file;
+            message.fileType = fileType;
+            message.recipients = self.recipients;
+            message.senderId = [[User currentUser] objectId];
+            message.senderName = [[User currentUser] username];
+            
+            [message saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
+                if (error) {
+                    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"An error occurred!" message:@"Please try sending your message again." preferredStyle:UIAlertControllerStyleAlert];
+                    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+                    [alert addAction:action];
+                    
+                    [self presentViewController:alert animated:YES completion:nil];
+                    
+                    
+                }
+                else {
+                    // Everything was successful!
+                    [self reset];
+                }
+            }];
+            //Fix: Made sure I delete the message so it doesn't sit in Memory. This should fix the memory leak
+            [[App currentApp] deleteMessage:message];
+        }
+    }];
 }
 
 - (void)reset {
